@@ -20,56 +20,56 @@ public class ProductoServiceImpl implements IProductoService {
     private static final Logger log = LoggerFactory.getLogger(ProductoServiceImpl.class);
     @Autowired
     private IProductoDao productoDao;
-
-    @Override
-    @Transactional(readOnly = true)
-
-    public ResponseEntity<ProductoResponseRest> buscarProducto() {
-        log.info("Buscando categorias");
-        ProductoResponseRest response = new ProductoResponseRest();
-
-        try {
-            List<Producto> productos = (List<Producto>) productoDao.findAll();
-            response.getProductoResponse().setProducto(productos);
-            response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
-        } catch (Exception e) {
-            response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
-            log.error("Error al buscar categorias", e.getMessage());
-            e.getStackTrace();
-            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-
-
-    public ResponseEntity<ProductoResponseRest> buscarPorId(Long id) {
-
-
-        log.info("Buscar por ID");
-        ProductoResponseRest response = new ProductoResponseRest();
-        List<Producto> list = new ArrayList<>();
-        try {
-            Optional<Producto> producto = productoDao.findById(id);
-            if (producto.isPresent()) {
-                list.add(producto.get());
-                response.getProductoResponse().setProducto(list);
-                response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
-            } else {
-                log.info("No se encontro la categoria");
-                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
-            log.error("Error al buscar categorias", e.getMessage());
-            e.getStackTrace();
-            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
-    }
+//
+//    @Override
+//    @Transactional(readOnly = true)
+//
+//    public ResponseEntity<ProductoResponseRest> buscarProducto() {
+//        log.info("Buscando categorias");
+//        ProductoResponseRest response = new ProductoResponseRest();
+//
+//        try {
+//            List<Producto> productos = (List<Producto>) productoDao.findAll();
+//            response.getProductoResponse().setProducto(productos);
+//            response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
+//        } catch (Exception e) {
+//            response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
+//            log.error("Error al buscar categorias", e.getMessage());
+//            e.getStackTrace();
+//            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
+//    }
+//
+//    @Override
+//    @Transactional(readOnly = true)
+//
+//
+//    public ResponseEntity<ProductoResponseRest> buscarPorId(Long id) {
+//
+//
+//        log.info("Buscar por ID");
+//        ProductoResponseRest response = new ProductoResponseRest();
+//        List<Producto> list = new ArrayList<>();
+//        try {
+//            Optional<Producto> producto = productoDao.findById(id);
+//            if (producto.isPresent()) {
+//                list.add(producto.get());
+//                response.getProductoResponse().setProducto(list);
+//                response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
+//            } else {
+//                log.info("No se encontro la categoria");
+//                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
+//                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception e) {
+//            response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
+//            log.error("Error al buscar categorias", e.getMessage());
+//            e.getStackTrace();
+//            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
+//    }
 
     @Override
     @Transactional
@@ -99,66 +99,66 @@ public class ProductoServiceImpl implements IProductoService {
         }
         return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
     }
-
-    @Override
-    @Transactional
-    public ResponseEntity<ProductoResponseRest> actualizar(Producto producto, Long id) {
-
-
-        log.info("Actualizando producto");
-        ProductoResponseRest response = new ProductoResponseRest();
-        List<Producto> list = new ArrayList<>();
-        try {
-            Optional<Producto> productoBuscado = productoDao.findById(id);
-            if (productoBuscado.isPresent()) {
-
-                productoBuscado.get().setNombre(producto.getNombre());
-                productoBuscado.get().setPrecio(producto.getPrecio());
-                productoBuscado.get().setCliente(producto.getCliente());
-
-                Producto productoActualizar = productoDao.save(productoBuscado.get());
-                if (productoActualizar != null) {
-                    list.add(productoActualizar);
-                    response.getProductoResponse().setProducto(list);
-                    response.setMetada("Respuesta OK", "00", "Actualizacion exitosa");
-
-                } else {
-                    log.info("No se encontro la categoria");
-                    response.setMetada("Respuesta no encontrada", "-1", "Categoria no creada");
-                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-                }
-
-            } else {
-                log.info("No se pudo encontrar la categoria");
-                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
-                return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            response.setMetada("Respuesta FALLIDA", "-1", "Error al crear la categoria");
-            log.error("Error al guardar categorias", e.getMessage());
-            e.getStackTrace();
-            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
-    }
-
-    public ResponseEntity<ProductoResponseRest> eliminar(Long id) {
-        log.info("Eliminando producto");
-        ProductoResponseRest response = new ProductoResponseRest();
-        List<Producto> list = new ArrayList<>();
-        try {
-            productoDao.deleteById(id);
-            response.setMetada("Respuesta Ok", "00" ,"Eliminacion exitosa");
-        }catch (Exception e) {
-            response.setMetada("Error", "-1","Error al eliminar la categoria");
-            log.error("Error al eliminar categorias", e.getMessage());
-            e.getStackTrace();
-            return  new ResponseEntity<ProductoResponseRest>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
-    }
-
-
+//
+//    @Override
+//    @Transactional
+//    public ResponseEntity<ProductoResponseRest> actualizar(Producto producto, Long id) {
+//
+//
+//        log.info("Actualizando producto");
+//        ProductoResponseRest response = new ProductoResponseRest();
+//        List<Producto> list = new ArrayList<>();
+//        try {
+//            Optional<Producto> productoBuscado = productoDao.findById(id);
+//            if (productoBuscado.isPresent()) {
+//
+//                productoBuscado.get().setNombre(producto.getNombre());
+//                productoBuscado.get().setPrecio(producto.getPrecio());
+//                productoBuscado.get().setCliente(producto.getCliente());
+//
+//                Producto productoActualizar = productoDao.save(productoBuscado.get());
+//                if (productoActualizar != null) {
+//                    list.add(productoActualizar);
+//                    response.getProductoResponse().setProducto(list);
+//                    response.setMetada("Respuesta OK", "00", "Actualizacion exitosa");
+//
+//                } else {
+//                    log.info("No se encontro la categoria");
+//                    response.setMetada("Respuesta no encontrada", "-1", "Categoria no creada");
+//                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//                }
+//
+//            } else {
+//                log.info("No se pudo encontrar la categoria");
+//                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
+//                return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception e) {
+//            response.setMetada("Respuesta FALLIDA", "-1", "Error al crear la categoria");
+//            log.error("Error al guardar categorias", e.getMessage());
+//            e.getStackTrace();
+//            return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
+//    }
+//
+//    public ResponseEntity<ProductoResponseRest> eliminar(Long id) {
+//        log.info("Eliminando producto");
+//        ProductoResponseRest response = new ProductoResponseRest();
+//        List<Producto> list = new ArrayList<>();
+//        try {
+//            productoDao.deleteById(id);
+//            response.setMetada("Respuesta Ok", "00" ,"Eliminacion exitosa");
+//        }catch (Exception e) {
+//            response.setMetada("Error", "-1","Error al eliminar la categoria");
+//            log.error("Error al eliminar categorias", e.getMessage());
+//            e.getStackTrace();
+//            return  new ResponseEntity<ProductoResponseRest>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        return new ResponseEntity<ProductoResponseRest>(response, HttpStatus.OK);
+//    }
+//
+//
 
 
 }
