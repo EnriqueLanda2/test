@@ -27,7 +27,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     @Transactional(readOnly = true)
 
-    public ResponseEntity<ClienteResponseRest> buscarCategorias() {
+    public ResponseEntity<ClienteResponseRest> buscarClientes() {
         log.info("Buscando clientes");
         ClienteResponseRest response = new ClienteResponseRest();
 
@@ -67,7 +67,7 @@ public class ClienteServiceImpl implements IClienteService {
             }
         } catch (Exception e) {
             response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
-            log.error("Error al buscar categorias", e.getMessage());
+            log.error("Error al buscar clientes", e.getMessage());
             e.getStackTrace();
             return new ResponseEntity<ClienteResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -78,8 +78,6 @@ public class ClienteServiceImpl implements IClienteService {
     @Transactional
     public ResponseEntity<ClienteResponseRest> crear(Cliente cliente) {
 
-        // public ResponseEntity<CategoriaResponseRest> buscarCategorias() {
-//        log.info("Buscando categorias");
         log.info("Buscar por ID");
         ClienteResponseRest response = new ClienteResponseRest();
         List<Cliente> list = new ArrayList<>();
@@ -90,13 +88,13 @@ public class ClienteServiceImpl implements IClienteService {
                 response.getClienteResponse().setCliente(list);
                 response.setMetada("Respuesta OK", "00", "Creacion Exitosa");
             } else {
-                log.info("No se encontro la categoria");
-                response.setMetada("Respuesta no encontrada", "-1", "Categoria no creada");
+                log.info("No se encontro el cliente");
+                response.setMetada("Respuesta no encontrada", "-1", "Cliente no registrado");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            response.setMetada("Respuesta FALLIDA", "-1", "Error al crear la categoria");
-            log.error("Error al guardar categorias", e.getMessage());
+            response.setMetada("Respuesta FALLIDA", "-1", "Error al registrar el cliente");
+            log.error("Error al guardar clientes", e.getMessage());
             e.getStackTrace();
             return new ResponseEntity<ClienteResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -108,7 +106,7 @@ public class ClienteServiceImpl implements IClienteService {
     public ResponseEntity<ClienteResponseRest> actualizar(Cliente cliente, Long id) {
 
 
-        log.info("Actualizando categoria");
+        log.info("Actualizando clientes");
         ClienteResponseRest response = new ClienteResponseRest();
         List<Cliente> list = new ArrayList<>();
         try {
@@ -125,18 +123,18 @@ public class ClienteServiceImpl implements IClienteService {
                     response.setMetada("Respuesta OK", "00", "Actualizacion exitosa");
 
                 } else {
-                    log.info("No se encontro la categoria");
-                    response.setMetada("Respuesta no encontrada", "-1", "Categoria no creada");
+                    log.info("No se encontro el cliente");
+                    response.setMetada("Respuesta no encontrada", "-1", "Cliente no actualizado");
                     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
                 }
 
             } else {
-                log.info("No se pudo encontrar la categoria");
-                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
+                log.info("No se pudo encontrar el cliente");
+                response.setMetada("Respuesta no encontrada", "-1", "Cliente no encontrado");
                 return new ResponseEntity<ClienteResponseRest>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            response.setMetada("Respuesta FALLIDA", "-1", "Error al crear la categoria");
+            response.setMetada("Respuesta FALLIDA", "-1", "Error al actualizar el cliente");
             log.error("Error al guardar categorias", e.getMessage());
             e.getStackTrace();
             return new ResponseEntity<ClienteResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -152,7 +150,7 @@ public class ClienteServiceImpl implements IClienteService {
             clienteDao.deleteById(id);
             response.setMetada("Respuesta Ok", "00" ,"Eliminacion exitosa");
         }catch (Exception e) {
-            response.setMetada("Error", "-1","Error al eliminar la categoria");
+            response.setMetada("Error", "-1","Error al eliminar el cliente");
             log.error("Error al eliminar el cliente", e.getMessage());
             e.getStackTrace();
             return  new ResponseEntity<ClienteResponseRest>(response,HttpStatus.INTERNAL_SERVER_ERROR);
