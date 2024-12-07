@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,13 +16,14 @@ public class Cliente {
 
     private String nombre;
 
-    private String carrito;
 
     // Relación One-to-Many con Producto
     @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Serializa esta relación    private List<Producto> productos;
-    private List<Producto> productos;
+    @JsonManagedReference // Serializa esta relación
+    private List<CarritoProducto> carritoProductos = new ArrayList<>();
+
+
 
     // Getters y setters
     public Long getId() {
@@ -40,21 +42,11 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public String getCarrito() {
-        return carrito;
+    public List<CarritoProducto> getCarritoProductos() {
+        return carritoProductos;
     }
 
-    public void setCarrito(String carrito) {
-
-        this.carrito = carrito;
-
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setCarritoProductos(List<CarritoProducto> carritoProductos) {
+        this.carritoProductos = carritoProductos;
     }
 }

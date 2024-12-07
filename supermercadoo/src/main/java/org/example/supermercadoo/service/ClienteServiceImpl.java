@@ -28,7 +28,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Transactional(readOnly = true)
 
     public ResponseEntity<ClienteResponseRest> buscarCategorias() {
-        log.info("Buscando categorias");
+        log.info("Buscando clientes");
         ClienteResponseRest response = new ClienteResponseRest();
 
         try {
@@ -37,7 +37,7 @@ public class ClienteServiceImpl implements IClienteService {
             response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
         } catch (Exception e) {
             response.setMetada("Respuesta FALLIDA", "-1", "Respuesta fallida");
-            log.error("Error al buscar categorias", e.getMessage());
+            log.error("Error al buscar clientes", e.getMessage());
             e.getStackTrace();
             return new ResponseEntity<ClienteResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -61,8 +61,8 @@ public class ClienteServiceImpl implements IClienteService {
                 response.getClienteResponse().setCliente(list);
                 response.setMetada("Respuesta OK", "00", "Respuesta exitosa");
             } else {
-                log.info("No se encontro la categoria");
-                response.setMetada("Respuesta no encontrada", "-1", "Categoria no encontrada");
+                log.info("No se encontro el cliente");
+                response.setMetada("Respuesta no encontrada", "-1", "Cliente no encontrado");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
@@ -116,8 +116,7 @@ public class ClienteServiceImpl implements IClienteService {
             if (clienteBuscado.isPresent()) {
 
                 clienteBuscado.get().setNombre(cliente.getNombre());
-                clienteBuscado.get().setCarrito(cliente.getCarrito());
-                clienteBuscado.get().setProductos(cliente.getProductos());
+
 
                 Cliente clienteActualizar = clienteDao.save(clienteBuscado.get());
                 if (clienteActualizar != null) {
@@ -146,7 +145,7 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     public ResponseEntity<ClienteResponseRest> eliminar(Long id) {
-        log.info("Eliminando categoria");
+        log.info("Eliminando cliente");
         ClienteResponseRest response = new ClienteResponseRest();
         List<Cliente> list = new ArrayList<>();
         try {
@@ -154,7 +153,7 @@ public class ClienteServiceImpl implements IClienteService {
             response.setMetada("Respuesta Ok", "00" ,"Eliminacion exitosa");
         }catch (Exception e) {
             response.setMetada("Error", "-1","Error al eliminar la categoria");
-            log.error("Error al eliminar categorias", e.getMessage());
+            log.error("Error al eliminar el cliente", e.getMessage());
             e.getStackTrace();
             return  new ResponseEntity<ClienteResponseRest>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
