@@ -42,4 +42,14 @@ public class CarritoController {
         ResponseEntity<CarritoResponseRest> response = carritoService.deshacerCarrito();
         return  response;
     }
+
+    @GetMapping("/supermercado/comprar/{clienteId}")
+    public ResponseEntity<CarritoResponseRest> comprarCarrito(@PathVariable Long clienteId){
+        ResponseEntity<CarritoResponseRest> response = carritoService.procesarCompra(clienteId);
+        return response;
+    }
+
+
+
+
 }

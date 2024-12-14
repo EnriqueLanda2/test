@@ -171,6 +171,52 @@ public class CarritoServiceImpl implements ICarritoService {
     }
 
 
+    //vaciara el carrito
+    @Override
+    @Transactional
+    public ResponseEntity<CarritoResponseRest> procesarCompra(Long clienteId) {
+        CarritoResponseRest response = new CarritoResponseRest();
+
+        try {
+            // Verificar si el cliente existe
+            Optional<Cliente> clienteProcesar = clienteDao.findById(clienteId);
+            if (!clienteProcesar.isPresent()) {
+                response.setMetada("Error", "-1", "Cliente no encontrado");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            // Obtener todos los productos del carrito del cliente
+            Cliente cliente = clienteProcesar.get();
+            List<Carrito> productosEnCarrito = carritoDao.findByCliente(cliente);
+
+            if (productosEnCarrito.isEmpty()) {
+                response.setMetada("Error", "-1", "El carrito ya está vacío");
+                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            }
+
+            // Calcular el total del carrito
+            double total = 0.0;
+            for (Carrito producto : productosEnCarrito) {
+                total += producto.getProducto().getPrecio() * producto.getCantidad();  // Precio por cantidad
+            }
+
+            // Eliminar los productos del carrito
+            carritoDao.deleteAll(productosEnCarrito);
+
+            // Devolver la respuesta con el total
+            response.setMetada("Respuesta OK", "00", "Carrito comprado exitosamente. El total del carrito sería de: " + total);
+            response.getCarritoResponse().setCarrito(new ArrayList<>());  // El carrito está vacío después de la compra
+
+        } catch (Exception e) {
+            log.error("Error al vaciar el carrito: ", e);
+            response.setMetada("Error", "-1", "Error interno al vaciar el carrito: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
 }
 

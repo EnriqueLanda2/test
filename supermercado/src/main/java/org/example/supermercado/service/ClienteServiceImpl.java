@@ -109,14 +109,24 @@ public class ClienteServiceImpl implements IClienteService {
 
     }
 
+
     @Override
-    @Transactional
-    public ResponseEntity<ClienteResponseRest> obtenerFila(){
+    @Transactional(readOnly = true)
+    public ResponseEntity<ClienteResponseRest> obtenerFila() {
         ClienteResponseRest response = new ClienteResponseRest();
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            List<Cliente> clientesRestantes = new ArrayList<>(clientesFila);
+            response.getClienteResponse().setCliente(clientesRestantes);
+            response.setMetada("Respuesta OK", "00", "Fila obtenida exitosamente");
 
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error al obtener la fila", e);
+            response.setMetada("Error", "-1", "Error al obtener la fila");
 
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

@@ -34,9 +34,12 @@ public class CajaController {
 
 
     @GetMapping("/cliente/obtenerFila")
-    public ResponseEntity<Queue<Cliente>> obtenerFila() {
-        Queue<Cliente> fila = ClienteServiceImpl.obtenerFila();
-        return new ResponseEntity<>(fila, HttpStatus.OK);
+    public ResponseEntity<ClienteResponseRest> obtenerFila() {
+        // Llama al servicio para obtener la fila
+        ResponseEntity<ClienteResponseRest> response = clienteService.obtenerFila();
+        return response;
     }
+
+
 
 }

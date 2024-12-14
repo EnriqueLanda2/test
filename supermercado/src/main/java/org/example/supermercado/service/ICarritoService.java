@@ -16,8 +16,7 @@ public interface ICarritoService {
 
     public ResponseEntity<CarritoResponseRest> deshacerCarrito();
 
+        public ResponseEntity<CarritoResponseRest>eliminarCarritoPorClienteYProducto(Long clienteId, Long productoId);
 
-
-
-
+        public ResponseEntity<CarritoResponseRest>procesarCompra(Long clienteId);
 }
