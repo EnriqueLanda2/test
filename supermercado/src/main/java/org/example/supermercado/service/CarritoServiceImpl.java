@@ -185,6 +185,7 @@ public class CarritoServiceImpl implements ICarritoService {
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
+
             // Obtener todos los productos del carrito del cliente
             Cliente cliente = clienteProcesar.get();
             List<Carrito> productosEnCarrito = carritoDao.findByCliente(cliente);
@@ -198,6 +199,7 @@ public class CarritoServiceImpl implements ICarritoService {
             double total = 0.0;
             for (Carrito producto : productosEnCarrito) {
                 total += producto.getProducto().getPrecio() * producto.getCantidad();  // Precio por cantidad
+
             }
 
             // Eliminar los productos del carrito
